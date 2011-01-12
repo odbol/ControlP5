@@ -55,6 +55,8 @@ public class ControlEvent {
 	public static int GROUP = 2;
 
 	protected int myAction;
+	
+	protected ControlEvent _trigger;
 
 	/**
 	 * 
@@ -91,7 +93,21 @@ public class ControlEvent {
 		isGroup = true;
 		isController = false;
 	}
-
+	
+	/**
+	 * 
+	 * @param theController
+	 *          Controller
+	 * @param trigger
+	 *          the event that triggered this event         
+	 */
+	public ControlEvent(ControllerGroup theController, ControlEvent trigger) {
+		_trigger = trigger;
+		_myController = theController;
+		isTab = false;
+		isGroup = true;
+		isController = false;
+	}
 	/**
 	 * returns the value of the controller as float.
 	 * 
@@ -184,6 +200,15 @@ public class ControlEvent {
 		return isGroup;
 	}
 
+	/**
+	 * returns the original event that triggered this event
+	 * 
+	 * @return the original event
+	 */
+	public ControlEvent trigger() {
+		return _trigger;
+	}	
+	
 	public String name() {
 		return _myController.name();
 	}

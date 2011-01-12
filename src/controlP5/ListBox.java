@@ -319,7 +319,7 @@ public class ListBox extends ControlGroup implements ControlListener {
 		if (theEvent.controller() instanceof Button) {
 			try {
 				_myValue = theEvent.controller().value();
-				ControlEvent myEvent = new ControlEvent(this);
+				ControlEvent myEvent = new ControlEvent(this, theEvent);
 				if (pulldown) {
 					close();
 					setLabel(theEvent.label());

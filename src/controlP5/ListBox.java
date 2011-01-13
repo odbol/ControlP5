@@ -318,12 +318,10 @@ public class ListBox extends ControlGroup implements ControlListener {
 	public void controlEvent(ControlEvent theEvent) {
 		if (theEvent.controller() instanceof Button) {
 			try {
-				_myValue = theEvent.controller().value();
+				setChanged(theEvent.label(), theEvent.controller().value());
+				
 				ControlEvent myEvent = new ControlEvent(this, theEvent);
-				if (pulldown) {
-					close();
-					setLabel(theEvent.label());
-				}
+
 				controlP5.controlbroadcaster().broadcast(myEvent, ControlP5Constants.FLOAT);
 				((Button) theEvent.controller()).onLeave();
 				((Button) theEvent.controller()).setIsInside(false);
@@ -336,6 +334,15 @@ public class ListBox extends ControlGroup implements ControlListener {
 		}
 
 	}
+	
+	public void setChanged(String label, float value) {
+		_myValue = value;
+		if (pulldown) {
+			close();
+			setLabel(label);
+		}	
+	}
+
 
 	/**
 	 * Enable a ListBox to act as a pulldown menu. Alternatively use class

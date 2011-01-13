@@ -4,6 +4,9 @@ package controlP5;
  * controlP5 is a processing gui library.
  *
  *  2007-2010 by Andreas Schlegel
+ *  
+ *  Modified by Tyler Freeman (http://odbol.com), 2011:
+ *  	- fixed BOTTOM/FIX value labels
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License

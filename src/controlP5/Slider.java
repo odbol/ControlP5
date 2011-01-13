@@ -392,6 +392,9 @@ public class Slider extends Controller {
 					_myValueLabel.draw(theApplet, (valueLabelPositioning == FIX) ? px : (int) (_myValuePosition), py);
 
 				} else {
+					int TEXT_HEIGHT = 8;
+					int TEXT_LEFT_MARGIN = 4;
+					
 					_myCaptionLabel.draw(theApplet, 0, height + 3);
 					switch (alignValueLabel) {
 					case (TOP):
@@ -403,11 +406,12 @@ public class Slider extends Controller {
 						px = 3;
 						break;
 					case (BOTTOM):
-						py = height + 3;
+						py = height - TEXT_HEIGHT - 1;//put it ABOVE the caption label!
+						px = TEXT_LEFT_MARGIN;
 						break;
 					}
-					_myValueLabel.draw(theApplet, (valueLabelPositioning == FIX) ? 0 : width + 4, (valueLabelPositioning == FIX) ? py
-							: -(int) _myValuePosition + height - 8);
+					_myValueLabel.draw(theApplet, (valueLabelPositioning == FIX) ? px : width + TEXT_LEFT_MARGIN, (valueLabelPositioning == FIX) ? py
+							: -(int) _myValuePosition + height - TEXT_HEIGHT);
 				}
 			}
 

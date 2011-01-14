@@ -3,6 +3,9 @@ package controlP5;
 /**
  *
  *  2007-2010 by Andreas Schlegel
+ *  
+ *  Modified by Tyler Freeman (http://odbol.com), 2011:
+ *  	- fixed draw() when no display mode (for invisible but active controllers)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -504,11 +507,12 @@ public abstract class Controller implements ControllerInterface, CDrawable, Cont
 	 * @param theApplet PApplet
 	 */
 	public void draw(final PApplet theApplet) {
-		theApplet.pushMatrix();
-		theApplet.translate(position.x, position.y);
-		_myDisplay.display(theApplet, this);
-		theApplet.popMatrix();
-
+		if (_myDisplay != null) {
+			theApplet.pushMatrix();
+			theApplet.translate(position.x, position.y);
+			_myDisplay.display(theApplet, this);
+			theApplet.popMatrix();
+		}
 		// theApplet.pushMatrix();
 		// _myDebugDisplay.display(theApplet, this);
 		// theApplet.popMatrix();

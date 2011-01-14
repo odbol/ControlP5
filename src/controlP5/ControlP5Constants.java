@@ -135,6 +135,8 @@ public interface ControlP5Constants {
 	 
 	public static final int CUSTOM = 3;
 	
+	public static final int NONE = 420929;	
+	
 	public static final int SWITCH = 100;
 	
 	public static final int MOVE = 0;

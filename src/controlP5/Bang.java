@@ -4,6 +4,9 @@ package controlP5;
  * controlP5 is a processing gui library.
  *
  *  2007-2010 by Andreas Schlegel
+ *  
+ *  Modified by Tyler Freeman (http://odbol.com), 2011:
+ *  	- added support for invisible but active controllers
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -172,6 +175,9 @@ public class Bang extends Controller {
 		case (IMAGE):
 			_myDisplay = new BangImageDisplay();
 			break;
+		case (NONE):
+			_myDisplay = null;
+		break;
 		case (CUSTOM):
 		default:
 			break;

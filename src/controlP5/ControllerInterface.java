@@ -137,6 +137,11 @@ public interface ControllerInterface {
 	public String name();
 
 	/**
+	 * Sets name.
+	 */
+	public void setName(String n);	
+	
+	/**
 	 * 
 	 * @return ControlWindow
 	 */

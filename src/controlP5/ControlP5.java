@@ -122,7 +122,15 @@ public class ControlP5 extends ControlP5Base {
 	// use blockDraw to prevent controlp5 to draw any elements.
 	// this is useful when using clear() or load()
 	protected boolean blockDraw;
+	
+	//incrementer for giving instances unique names to prevent OO conflicts.
+	private int uniqueId = 0;
 
+	//set to true to avoid naming conflicts with checkName() when creating a new controller.
+	//this is for object oriented programmers who do not want to use the relfection/name dictionary
+	//method of referring to controllers.
+	public boolean useUniqueNames = false;
+	
 	private static final Logger logger = Logger.getLogger("controlP5.ControlP5");
 
 	/**
@@ -289,12 +297,32 @@ public class ControlP5 extends ControlP5Base {
 		return myTab;
 	}
 
+	//returns a non-conflicting, unique name for the given name
+	public String getUniqueName(String name) {
+		return name + uniqueId++;
+	}
+	
+	
 	/**
 	 * 
 	 * @param theController ControllerInterface
 	 */
 	public void register(ControllerInterface theController) {
-		checkName(theController.name());
+		if (checkName(theController.name())) {
+			if (useUniqueNames) {
+				String newName = getUniqueName(theController.name());
+				
+				ControlP5.logger().warning("Controller with name \"" + theController.name()
+						+ "\" already exists. Renaming to " + newName);
+				
+				theController.setName(newName);
+			}
+			else {
+				ControlP5.logger().warning("Controller with name \"" + theController.name()
+						+ "\" already exists. overwriting reference of existing controller.");
+				
+			}
+		}
 		_myControllerMap.put(theController.name(), theController);
 		theController.init();
 	}
@@ -450,8 +478,7 @@ public class ControlP5 extends ControlP5Base {
 
 	private boolean checkName(String theName) {
 		if (_myControllerMap.containsKey(theName)) {
-			ControlP5.logger().warning("Controller with name \"" + theName
-					+ "\" already exists. overwriting reference of existing controller.");
+			
 			return true;
 		}
 		return false;

@@ -550,6 +550,15 @@ public abstract class ControllerGroup implements ControllerInterface, ControlP5C
 	public String name() {
 		return _myName;
 	}
+	
+	/**
+	 * Sets the name of the controller.
+	 * 
+	 * @return String
+	 */
+	public void setName(String n) {
+		 _myName = n;
+	}
 
 	/**
 	 * 

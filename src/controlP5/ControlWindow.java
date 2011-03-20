@@ -692,6 +692,7 @@ public class ControlWindow implements MouseWheelListener {
 			((PAppletWindow) _myApplet).visible(false);
 		}
 	}
+	
 
 	/**
 	 * @deprecated

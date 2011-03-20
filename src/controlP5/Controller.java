@@ -555,6 +555,16 @@ public abstract class Controller implements ControllerInterface, CDrawable, Cont
 		return _myName;
 	}
 
+
+	/**
+	 * Sets the name of the controller.
+	 * 
+	 * @return String
+	 */
+	public void setName(String n) {
+		 _myName = n;
+	}	
+	
 	/**
 	 * move a controller to another tab. The tab is defined by parameter
 	 * theTabName. if controlP5 can't find a tab with such name, controlP5 will

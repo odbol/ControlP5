@@ -122,14 +122,7 @@ public class ControlP5 extends ControlP5Base {
 	// use blockDraw to prevent controlp5 to draw any elements.
 	// this is useful when using clear() or load()
 	protected boolean blockDraw;
-	
-	//incrementer for giving instances unique names to prevent OO conflicts.
-	private int uniqueId = 0;
 
-	//set to true to avoid naming conflicts with checkName() when creating a new controller.
-	//this is for object oriented programmers who do not want to use the relfection/name dictionary
-	//method of referring to controllers.
-	public boolean useUniqueNames = false;
 	
 	private static final Logger logger = Logger.getLogger("controlP5.ControlP5");
 
@@ -296,11 +289,6 @@ public class ControlP5 extends ControlP5Base {
 		Tab myTab = theWindow.add(new Tab(this, theWindow, theName));
 		return myTab;
 	}
-
-	//returns a non-conflicting, unique name for the given name
-	public String getUniqueName(String name) {
-		return name + uniqueId++;
-	}
 	
 	
 	/**
@@ -347,7 +335,7 @@ public class ControlP5 extends ControlP5Base {
 	/**
 	 * 
 	 */
-	protected void clear() {
+	public void clear() {
 		for (int i = controlWindowList.size() - 1; i >= 0; i--) {
 			controlWindowList.get(i).clear();
 		}

@@ -30,6 +30,14 @@ import processing.core.PApplet;
 public class ControlP5Base implements ControlP5Constants {
 
 	ControlP5 controlP5;
+	
+	//incrementer for giving instances unique names to prevent OO conflicts.
+	private int uniqueId = 0;
+
+	//set to true to avoid naming conflicts with checkName() when creating a new controller.
+	//this is for object oriented programmers who do not want to use the relfection/name dictionary
+	//method of referring to controllers.
+	public boolean useUniqueNames = false;
 
 	protected void init(ControlP5 theControlP5) {
 		controlP5 = theControlP5;
@@ -623,16 +631,25 @@ public class ControlP5Base implements ControlP5Constants {
 	 * @return ControlWindow ControlWindow
 	 */
 	public ControlWindow addControlWindow(
-			final String theWindowName,
+			String theWindowName,
 			final int theX,
 			final int theY,
 			final int theWidth,
 			final int theHeight,
 			String theRenderer,
 			int theFrameRate) {
+		
 		for (int i = 0; i < controlP5.controlWindowList.size(); i++) {
-			if (((ControlWindow) controlP5.controlWindowList.get(i)).name().equals(theWindowName)) {
-				ControlP5.logger().warning("ControlWindow with name " + theWindowName + " already exists. overwriting now.");
+			ControlWindow win = (ControlWindow) controlP5.controlWindowList.get(i);
+			if (win.name().equals(theWindowName)) {
+				if (useUniqueNames) {
+					String newName = getUniqueName(theWindowName);
+					ControlP5.logger().warning("ControlWindow with name " + theWindowName + " already exists. Renaming to " + newName);
+					theWindowName = newName;
+				}
+				else
+					ControlP5.logger().warning("ControlWindow with name " + theWindowName + " already exists. overwriting now.");
+				
 			}
 		}
 		PAppletWindow myPAppletWindow = new PAppletWindow(theWindowName, theX, theY, theWidth, theHeight, theRenderer, theFrameRate);
@@ -719,4 +736,8 @@ public class ControlP5Base implements ControlP5Constants {
 		return addControlWindow(theName, 20, 20, 400, 400);
 	}
 
+	//returns a non-conflicting, unique name for the given name
+	public String getUniqueName(String name) {
+		return name + uniqueId++;
+	}
 }

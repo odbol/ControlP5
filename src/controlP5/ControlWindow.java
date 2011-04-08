@@ -110,6 +110,10 @@ public class ControlWindow implements MouseWheelListener {
 
 	protected boolean rendererNotification = false;
 
+	private boolean isMarkedForRemoval = false;
+
+	private boolean isMarkedForClear = false;
+	
 	/**
 	 * 
 	 * @param theControlP5 ControlP5
@@ -269,26 +273,54 @@ public class ControlWindow implements MouseWheelListener {
 	 * remove a control window from controlP5.
 	 */
 	public void remove() {
-		for (int i = _myTabs.size() - 1; i >= 0; i--) {
-			((Tab) _myTabs.get(i)).remove();
-		}
-		_myTabs.clear();
-		_myTabs.clearDrawable();
-		controlP5.controlWindowList.remove(this);
+		remove(false);
 	}
+	
+	/**
+	 * remove a control window from controlP5,
+	 * delayed until the next draw cycle if specified.
+	 * see ControlP5.remove(true) for info.
+	 */
+	public void remove(boolean isDelayed) {
+		if (isDelayed) {
+			isMarkedForRemoval = true;
+		}
+		else {
+			for (int i = _myTabs.size() - 1; i >= 0; i--) {
+				((Tab) _myTabs.get(i)).remove();
+			}
+			_myTabs.clear();
+			_myTabs.clearDrawable();
+		
+			//these two do the same thing, but one is delayed
+			controlP5.controlWindowList.remove(this);
+			//controlP5.remove(this.name(), isDelayed);
+		}
+	}
+	
+	
 
 	/**
 	 * clear the control window, delete all controllers from a control window.
 	 */
 	public void clear() {
-		remove();
-		if (_myApplet instanceof PAppletWindow) {
-			_myApplet.unregisterMouseEvent(this);
-			_myApplet.removeMouseWheelListener(this);
-			_myApplet.stop();
-			((PAppletWindow) _myApplet).dispose();
-			_myApplet = null;
-			System.gc();
+		clear(false);
+	}
+	
+	public void clear(boolean isDelayed) {
+		if (isDelayed) {
+			isMarkedForClear = true;
+		}
+		else {
+			remove(isDelayed);
+			if (_myApplet instanceof PAppletWindow) {
+				_myApplet.unregisterMouseEvent(this);
+				_myApplet.removeMouseWheelListener(this);
+				_myApplet.stop();
+				((PAppletWindow) _myApplet).dispose();
+				_myApplet = null;
+				System.gc();
+			}
 		}
 	}
 
@@ -384,6 +416,15 @@ public class ControlWindow implements MouseWheelListener {
 	 * 
 	 */
 	public void draw() {
+		if (isMarkedForClear ) { //preserve concurrency. see ControlP5.remove(true) for info.
+			clear(false);
+			return;
+		}
+		if (isMarkedForRemoval) { //preserve concurrency. see ControlP5.remove(true) for info.
+			remove();
+			return;
+		}
+		
 		if (controlP5.blockDraw == false) {
 
 			_myPicking.reset();
@@ -493,7 +534,10 @@ public class ControlWindow implements MouseWheelListener {
 		if (isVisible) {
 			if (theMouseEvent.getID() == MouseEvent.MOUSE_PRESSED) {
 				mousePressed = true;
-				for (int i = 0; i < _myTabs.size(); i++) {
+				for (int i = 0; i < _myTabs.size(); i++) { 
+					if (isMarkedForRemoval || isMarkedForClear) //don't run any more events if window is closing
+						break;
+					
 					if (((ControllerInterface) _myTabs.get(i)).setMousePressed(true)) {
 						mouselock = true;
 						return;
@@ -505,6 +549,9 @@ public class ControlWindow implements MouseWheelListener {
 				mousePressed = false;
 				mouselock = false;
 				for (int i = 0; i < _myTabs.size(); i++) {
+					if (isMarkedForRemoval || isMarkedForClear) //don't run any more events if window is closing
+						break;
+					
 					((ControllerInterface) _myTabs.get(i)).setMousePressed(false);
 				}
 			}

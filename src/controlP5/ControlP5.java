@@ -44,6 +44,9 @@ public class ControlP5 extends ControlP5Base {
 	public ControlWindow controlWindow;
 
 	private Hashtable<String, ControllerInterface> _myControllerMap;
+	
+	//used to delay removal of items for threadsafe operations
+	private Vector<String> controllersMarkedForRemoval;
 
 	protected ControlBroadcaster _myControlBroadcaster;
 
@@ -150,13 +153,14 @@ public class ControlP5 extends ControlP5Base {
 		welcome();
 		isTabEventsActive = false;
 		_myControlP5IOHandler = new ControlP5IOHandler(this);
-		controlWindowList = new Vector<ControlWindow>();
+		controlWindowList = new Vector<ControlWindow>();		
 		_myControlBroadcaster = new ControlBroadcaster(this);
 		keyHandler = new ControlWindowKeyHandler(this);
 		controlWindow = new ControlWindow(this, papplet);
 		papplet.registerKeyEvent(new ControlWindowKeyListener(this));
 		papplet.registerDispose(this);
 		_myControllerMap = new Hashtable<String, ControllerInterface>();
+		controllersMarkedForRemoval = new Vector<String>();
 		controlWindowList.add(controlWindow);
 		isApplet = papplet.online;
 		super.init(this);
@@ -392,7 +396,29 @@ public class ControlP5 extends ControlP5Base {
 		}
 
 	}
+	
+	
+	
+	/**
+	 * delays the removal a controlP5 element such as a controller, group, or tab by name, 
+	 * until the beginning of the draw cycle. This ensures concurrency (does it?), allowing
+	 * you to remove an object from within that object's event listener. 
+	 * 
+	 * For example, use this function when trying to remove a button when you click it, 
+	 * or close a window from a listener within the window itself.
+	 * 
+	 * @param theString String
+	 */
+	public void remove(String theString, boolean isDelayed) {
+		if (isDelayed) {
+			controllersMarkedForRemoval.add(theString);
+		}
+		else {
+			remove(theString);
+		}			
+	}
 
+	
 	/**
 	 * get a controller by name. you will have to cast the controller.
 	 * 
@@ -434,6 +460,11 @@ public class ControlP5 extends ControlP5Base {
 	}
 
 	public void draw() {
+		//remove any controllers in the queue
+		for (String n : controllersMarkedForRemoval) {
+			remove(n);
+		}
+		
 		if (blockDraw == false) {
 			controlWindow.draw();
 		}

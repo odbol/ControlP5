@@ -588,7 +588,8 @@ public abstract class ControllerGroup implements ControllerInterface, ControlP5C
 			return false;
 		}
 		for (int i = controllers.size() - 1; i >= 0; i--) {
-			if (((ControllerInterface) controllers.get(i)).setMousePressed(theStatus)) {
+			ControllerInterface c = (ControllerInterface) controllers.get(i);
+			if (c.setMousePressed(theStatus)) {
 				return true;
 			}
 		}

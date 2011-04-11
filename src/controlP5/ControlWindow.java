@@ -416,13 +416,15 @@ public class ControlWindow implements MouseWheelListener {
 	 * 
 	 */
 	public void draw() {
-		if (isMarkedForClear ) { //preserve concurrency. see ControlP5.remove(true) for info.
-			clear(false);
-			return;
-		}
-		if (isMarkedForRemoval) { //preserve concurrency. see ControlP5.remove(true) for info.
-			remove();
-			return;
+		if (!mouselock) {
+			if (isMarkedForClear ) { //preserve concurrency. see ControlP5.remove(true) for info.
+				clear(false);
+				return;
+			}
+			if (isMarkedForRemoval) { //preserve concurrency. see ControlP5.remove(true) for info.
+				remove();
+				return;
+			}
 		}
 		
 		if (controlP5.blockDraw == false) {

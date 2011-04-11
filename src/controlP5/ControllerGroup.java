@@ -588,8 +588,15 @@ public abstract class ControllerGroup implements ControllerInterface, ControlP5C
 			return false;
 		}
 		for (int i = controllers.size() - 1; i >= 0; i--) {
-			ControllerInterface c = (ControllerInterface) controllers.get(i);
-			if (c.setMousePressed(theStatus)) {
+			ControllerInterface c = null;
+			//TODO: this is very slow, and not a fix for the concurrency issues, but what else to do?
+			try {
+				c = (ControllerInterface) controllers.get(i);
+			}
+			catch (ArrayIndexOutOfBoundsException e) {
+				return false;
+			}
+			if (c != null && c.setMousePressed(theStatus)) {
 				return true;
 			}
 		}

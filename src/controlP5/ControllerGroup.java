@@ -594,6 +594,7 @@ public abstract class ControllerGroup implements ControllerInterface, ControlP5C
 				c = (ControllerInterface) controllers.get(i);
 			}
 			catch (ArrayIndexOutOfBoundsException e) {
+				PApplet.println("Concurency ERROR: a control was removed before it was done processing the mouse event. Threading problem in ControllerGroup.setMousePressed.");
 				return false;
 			}
 			if (c != null && c.setMousePressed(theStatus)) {
@@ -922,5 +923,11 @@ public abstract class ControllerGroup implements ControllerInterface, ControlP5C
 				+ _myValue + "\n" + "position:\t" + position + "\n" + "absolute:\t" + absolutePosition + "\n" + "width:\t"
 				+ getWidth() + "\n" + "height:\t" + getHeight() + "\n" + "color:\t" + getColor() + "\n" + "visible:\t"
 				+ isVisible + "\n" + "moveable:\t" + isMoveable + "\n";
+	}
+	
+	
+	//moves the controller to the end of the draw queue so it is drawn on top of everything else.
+	public void moveToForeground(ControllerInterface theController) {
+		controllers.moveToForeground(theController);
 	}
 }

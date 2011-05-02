@@ -51,6 +51,14 @@ public class ControllerList {
 	protected void remove(ControllerInterface theController) {
 		controllers.remove(theController);
 	}
+	
+	//moves the controller to the end of the draw queue so it is drawn on top of everything else.
+	public void moveToForeground(ControllerInterface theController) {
+		if (controllers.remove(theController))
+			((Vector<ControllerInterface>)controllers).add(theController); //.insertElementAt(theController, 0);//
+		else
+			ControlP5.logger().warning("Tried to moveToForground() a non-existing controller");
+	}
 
 	protected void addDrawable(CDrawable theController) {
 		if (drawables.indexOf(theController) < 0) {

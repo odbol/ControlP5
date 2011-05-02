@@ -109,7 +109,7 @@ public class ListBox extends ControlGroup implements ControlListener {
 	/**
 	 * show the scrollbar.
 	 */
-	public void showScrollbar() {
+	public void showScrollbar() {	
 		isScrollbarVisible = true;
 		if ((items.size()) * _myItemHeight > _myBackgroundHeight && isScrollbarVisible) {
 			_myScrollbar.show();
@@ -139,7 +139,9 @@ public class ListBox extends ControlGroup implements ControlListener {
 	/**
 	 * internal scroll updates.
 	 */
-	private void scroll() {
+	private void scroll() {		
+		moveToForeground();
+	
 		int n = 0;
 		if (buttons.size() < items.size() && isScrollbarVisible) {
 			_myScrollbar.show();
@@ -435,4 +437,20 @@ public class ListBox extends ControlGroup implements ControlListener {
 		theElement.setAttribute("type", "listBox");
 	}
 
+	/**
+	 * Moves to the end of the draw queue so it is drawn on top of everything else.
+	 * 
+	 * @see Tab.moveToForeground()
+	 */
+	public void moveToForeground() {
+		
+		ControlP5.logger().warning("\nlistbox moveToForeground; " + this._myId);	
+		
+		getTab().moveToForeground(this);
+		this.setBackgroundColor(0x00ff0000);
+		
+		for (Button b : buttons) {
+			moveToForeground(b);
+		}
+	}
 }

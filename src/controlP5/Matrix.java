@@ -84,13 +84,21 @@ public class Matrix extends Controller {
 		stepX = width / _myCellX;
 		stepY = height / _myCellY;
 		myMarkers = new int[_myCellX][_myCellY];
+		clearMarkers();
+		_myTime = System.currentTimeMillis();
+		_myInterval = 100;
+	}
+
+	/**
+	 * Resets the matrix back to empty.
+	 * 
+	 */
+	public void clearMarkers() {
 		for (int x = 0; x < _myCellX; x++) {
 			for (int y = 0; y < _myCellY; y++) {
 				myMarkers[x][y] = -1;
 			}
 		}
-		_myTime = System.currentTimeMillis();
-		_myInterval = 100;
 	}
 
 	/**

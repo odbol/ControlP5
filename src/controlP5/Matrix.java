@@ -100,6 +100,20 @@ public class Matrix extends Controller {
 			}
 		}
 	}
+	
+	//returns the values as an array where the index is x and the element is y value.
+	public int[] getValues() {
+		int[] r = new int[_myCellX];
+		
+		for (int i = 0; i < _myCellX; i++) {
+			for (int j = 0; j < _myCellY; j++) {
+				if (myMarkers[i][j] == 1)
+					r[i] = j;
+			}
+		}
+		
+		return r;
+	}
 
 	/**
 	 * set the speed of intervals in millis iterating through the matrix.

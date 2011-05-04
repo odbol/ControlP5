@@ -29,8 +29,11 @@ package controlP5;
  *
  */
 
+import java.awt.Container;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
+
 import processing.core.PApplet;
 
 /**
@@ -66,6 +69,8 @@ public class ListBox extends ControlGroup implements ControlListener {
 
 	protected boolean pulldown;
 
+	protected List<ControlListener> _myControlListener;
+
 	protected ListBox(
 			ControlP5 theControlP5,
 			ControllerGroup theGroup,
@@ -96,6 +101,8 @@ public class ListBox extends ControlGroup implements ControlListener {
 		add(_myScrollbar);
 		
 		setHeight(_myBackgroundHeight);
+		
+		_myControlListener = new Vector<ControlListener>();
 	}
 
 	/**
@@ -327,7 +334,12 @@ public class ListBox extends ControlGroup implements ControlListener {
 				setChanged(theEvent.label(), theEvent.controller().value());
 				
 				ControlEvent myEvent = new ControlEvent(this, theEvent);
-
+				
+				//first let our listeners know
+				for (ControlListener cl : _myControlListener) {
+					cl.controlEvent(myEvent);
+				}
+				
 				controlP5.controlbroadcaster().broadcast(myEvent, ControlP5Constants.FLOAT);
 				((Button) theEvent.controller()).onLeave();
 				((Button) theEvent.controller()).setIsInside(false);
@@ -452,5 +464,35 @@ public class ListBox extends ControlGroup implements ControlListener {
 		for (Button b : buttons) {
 			moveToForeground(b);
 		}
+	}
+	
+	/**
+	 * add a listener to the controller.
+	 * 
+	 * ControlListener
+	 * 
+	 * @param theListener ControlListener
+	 */
+	public void addListener(final ControlListener theListener) {
+		_myControlListener.add(theListener);
+	}
+
+	/**
+	 * remove a listener from the controller.
+	 * 
+	 * ControlListener
+	 * 
+	 * @param theListener ControlListener
+	 */
+	public void removeListener(final ControlListener theListener) {
+		_myControlListener.remove(theListener);
+	}
+
+	/**
+	 * 
+	 * @return int
+	 */
+	public int listenerSize() {
+		return _myControlListener.size();
 	}
 }

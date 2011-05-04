@@ -62,7 +62,18 @@ public class ControlP5Base implements ControlP5Constants {
 	public Tab addTab(ControlWindow theWindow, String theName) {
 		for (int i = 0; i < theWindow.tabs().size(); i++) {
 			if (theWindow.tabs().get(i).name().equals(theName)) {
-				return (Tab) theWindow.tabs().get(i);
+				if (useUniqueNames) {
+					String newName = getUniqueName(theName);
+					
+					ControlP5.logger().warning("Tab with name \"" + theName
+							+ "\" already exists. Renaming to " + newName);
+					
+					theName = newName;
+					break;
+				}
+				else {
+					return (Tab) theWindow.tabs().get(i);
+				}
 			}
 		}
 		Tab myTab = new Tab(controlP5, theWindow, theName);

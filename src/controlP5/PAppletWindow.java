@@ -40,6 +40,7 @@ import java.lang.reflect.Method;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 
+
 /**
  * PAppletWIndow description.
  * 
@@ -82,6 +83,13 @@ public class PAppletWindow extends PApplet implements WindowListener, ComponentL
 	protected String _myRenderer = "";
 
 	protected int _myFrameRate = 15;
+
+	
+	
+	public static final int DISPOSE_ON_CLOSE = 0;
+	public static final int HIDE_ON_CLOSE = 1;
+	
+	public int closeButtonBehavior = DISPOSE_ON_CLOSE;
 
 	/*
 	 * (non-Javadoc)
@@ -322,9 +330,14 @@ public class PAppletWindow extends PApplet implements WindowListener, ComponentL
 	 * (non-Javadoc)
 	 */
 	public void windowClosing(WindowEvent e) {
-		controlWindow.remove();
-		controlWindow._myApplet.stop();
-		dispose();
+		if (closeButtonBehavior == HIDE_ON_CLOSE ) {
+			controlWindow.hide();
+		}
+		else {
+			controlWindow.remove();
+			controlWindow._myApplet.stop();
+			dispose();
+		}
 	}
 
 	/*

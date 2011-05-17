@@ -742,6 +742,25 @@ public class ControlWindow implements MouseWheelListener {
 		}
 	}
 	
+	
+	/**
+	 * Set to true to only hide the window when they click the close button, instead of disposing of it completely.
+	 * Use this in case you want to open the window up again later, or 
+	 * if you want to disable the close button.
+	 * 
+	 * TODO: this only works for PAppletWindows. 
+	 * 
+	 * @param shouldDispose
+	 */
+	public void setDisposeOnCloseButton(boolean shouldDispose) {
+		if (isPAppletWindow) {
+			if (shouldDispose)
+				((PAppletWindow) _myApplet).closeButtonBehavior = PAppletWindow.DISPOSE_ON_CLOSE;
+			else
+				((PAppletWindow) _myApplet).closeButtonBehavior = PAppletWindow.HIDE_ON_CLOSE;
+		}
+	}
+	
 
 	/**
 	 * @deprecated

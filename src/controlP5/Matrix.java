@@ -67,6 +67,38 @@ public class Matrix extends Controller {
 
 	protected int currentY = -1;
 
+	private boolean isPlaying = true;
+	private boolean isLooping = true;
+
+	/**
+	 * Indicates if the matrix is cycling through values.
+	 * 
+	 * @return
+	 */
+	public boolean isPlaying() {
+		return isPlaying;
+	}
+
+	/**
+	 * Stop cycling through values. 
+	 * 
+	 */
+	public void stop() {
+		cnt = 0;
+		this.isPlaying = false;
+	}
+	
+	/**
+	 * Start cycling through values. 
+	 * 
+	 * @param isLoop If true, keep looping. If false, play only once through.
+	 */
+	public void play(boolean isLoop) {
+		cnt = 0;
+		this.isPlaying = true;
+		this.isLooping = isLoop;
+	}
+
 	public Matrix(
 			ControlP5 theControlP5,
 			ControllerGroup theParent,
@@ -132,23 +164,37 @@ public class Matrix extends Controller {
 		return _myInterval;
 	}
 
+	private void updatePlaying() {
+		if (System.currentTimeMillis() > _myTime + _myInterval) {
+			_myTime = System.currentTimeMillis();
+			
+			if (isPlaying) {
+				cnt += 1;
+				if (cnt >= _myCellX) {
+					cnt = 0;
+					if (!isLooping) {
+						isPlaying = false;
+						return;
+					}
+				}
+				
+				for (int i = 0; i < _myCellY; i++) {
+					if (myMarkers[cnt][i] == 1) {
+						_myValue = 0;
+						_myValue = (cnt << 0) + (i << 8);
+						setValue(_myValue);
+					}
+				}
+			}
+		}
+	}
+	
 	/**
 	 * @see ControllerInterfalce.updateInternalEvents
 	 * 
 	 */
 	public void updateInternalEvents(PApplet theApplet) {
-		if (System.currentTimeMillis() > _myTime + _myInterval) {
-			cnt += 1;
-			cnt %= _myCellX;
-			_myTime = System.currentTimeMillis();
-			for (int i = 0; i < _myCellY; i++) {
-				if (myMarkers[cnt][i] == 1) {
-					_myValue = 0;
-					_myValue = (cnt << 0) + (i << 8);
-					setValue(_myValue);
-				}
-			}
-		}
+		updatePlaying();
 
 		setIsInside(inside());
 
@@ -170,6 +216,7 @@ public class Matrix extends Controller {
 			}
 		}
 	}
+
 
 	/*
 	 * (non-Javadoc)

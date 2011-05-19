@@ -107,11 +107,10 @@ public class Matrix extends Controller {
 		Integer[] r = new Integer[_myCellX];
 		
 		for (int i = 0; i < _myCellX; i++) {
+			//r[i] = null;
 			for (int j = 0; j < _myCellY; j++) {
 				if (myMarkers[i][j] == 1)
 					r[i] = j;
-				else
-					r[i] = null;;
 			}
 		}
 		

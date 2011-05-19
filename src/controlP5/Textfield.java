@@ -215,6 +215,8 @@ public class Textfield extends Controller {
 	 */
 	protected void mouseReleasedOutside() {
 		if (isKeepFocus == false) {
+			if (!isAutoClear())
+				submit();
 			isTexfieldActive = isActive = false;
 		}
 	}

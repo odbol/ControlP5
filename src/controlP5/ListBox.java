@@ -456,7 +456,7 @@ public class ListBox extends ControlGroup implements ControlListener {
 	 */
 	public void moveToForeground() {
 		
-		ControlP5.logger().warning("\nlistbox moveToForeground; " + this._myId);	
+		//ControlP5.logger().finer("\nlistbox moveToForeground; " + this._myId);	
 		
 		getTab().moveToForeground(this);
 		this.setBackgroundColor(0x00ff0000);

@@ -459,5 +459,4 @@ public class PAppletWindow extends PApplet implements WindowListener, ComponentL
 		frame.setVisible(true);
 		requestFocus();
 	}
-
 }

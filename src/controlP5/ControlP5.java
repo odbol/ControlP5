@@ -771,6 +771,17 @@ public class ControlP5 extends ControlP5Base {
 	public void hide() {
 		controlWindow.hide();
 	}
+	
+	/**
+	 * hide all child controlWindows except this one.
+	 */
+	public void hideChildren() {
+		for (int i = controlWindowList.size() - 1; i >= 0; i--) {
+			ControlWindow c = controlWindowList.get(i);
+			if (c != controlWindow)
+				c.hide();
+		}
+	}
 
 	public void update() {
 		for (Enumeration<ControlWindow> e = controlWindowList.elements(); e.hasMoreElements();) {

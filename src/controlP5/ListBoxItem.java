@@ -26,9 +26,9 @@ package controlP5;
  */
 
 public class ListBoxItem {
-	protected String name;
+	public String name;
 	protected String text;
-	protected int value;
+	public int value;
 	protected boolean isActive;
 	protected CColor color;
 	protected int id = -1;
